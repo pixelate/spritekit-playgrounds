@@ -10,6 +10,8 @@ class Scene: SKScene {
     private let circleMargin: CGFloat = 4.5
     
     private var wavePatternNode: SKNode!
+    
+    private var reactangleNode: SKShapeNode!
 
     private let colorSand = NSColor(red:0.93, green: 0.91, blue: 0.88, alpha: 1.0)
     private let colorTerracotta = NSColor.init(red: 0.93, green: 0.21, blue: 0.25, alpha: 1.0)
@@ -20,11 +22,13 @@ class Scene: SKScene {
         
         createCirclePattern(columns: 9, rows: 19)
         createWavePattern(columns: 11, rows: 4)
+        createRectangle()
     }
     
     func createCirclePattern(columns: Int, rows: Int) {
         circlePatternNode = SKNode.init()
-        circlePatternNode.position = CGPoint(x: -240, y: -250)
+        circlePatternNode.position = CGPoint(x: -244, y: -318)
+        circlePatternNode.zPosition = -1
         addChild(circlePatternNode)
 
         circleNode = SKShapeNode(rectOf: CGSize(width: circleSize, height: circleSize), cornerRadius: circleSize * 0.5)
@@ -71,7 +75,8 @@ class Scene: SKScene {
     
     func createWavePattern(columns: Int, rows: Int) {
         wavePatternNode = SKNode.init()
-        wavePatternNode.position = CGPoint(x: 124, y: 100)
+        wavePatternNode.position = CGPoint(x: 124, y: 50)
+        wavePatternNode.zPosition = 1
         addChild(wavePatternNode)
 
         var points: [CGPoint] = getWavePoints(length: columns * 2)
@@ -86,6 +91,16 @@ class Scene: SKScene {
             
             wavePatternNode.addChild(waveNode)
         }
+    }
+    
+    func createRectangle() {
+        reactangleNode = SKShapeNode(rectOf: CGSize(width: 400, height: 600))
+        reactangleNode.lineWidth = 0
+        reactangleNode.fillColor = colorTerracotta
+        reactangleNode.position.y = 30
+        reactangleNode.zPosition = 0
+        reactangleNode.blendMode = SKBlendMode.multiply
+        addChild(reactangleNode)
     }
     
     func getWavePoints(length: Int) -> [CGPoint] {

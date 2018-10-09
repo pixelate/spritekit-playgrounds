@@ -5,11 +5,16 @@ import SpriteKit
 
 class Scene: SKScene {
     
+    private var circlesEffectNode: SKEffectNode!
+    
     private var circles: [SKShapeNode] = []
     
+    private let colorWhite = NSColor(red: 1, green: 1, blue: 1, alpha: 1)
     private let colorBlack = NSColor(red: 0, green: 0, blue: 0, alpha: 1.0)
     private let colorTerracotta = NSColor.init(red: 0.93, green: 0.21, blue: 0.25, alpha: 1.0)
     private let colorTransparent = NSColor(red: 1, green: 1, blue: 1, alpha: 0)
+    
+    private let colorInvertFilter = CIFilter(name: "CIColorInvert")
     
     override func didMove(to view: SKView) {
         backgroundColor = colorBlack
@@ -18,9 +23,17 @@ class Scene: SKScene {
     
     override func mouseDown(with event: NSEvent) {
         moveCirclesTo(position: event.location(in: self))
+        circlesEffectNode.filter = colorInvertFilter
     }
-    
+
+    override func mouseUp(with event: NSEvent) {
+        circlesEffectNode.filter = nil
+    }
+
     func createCircles() {
+        circlesEffectNode = SKEffectNode.init()
+        addChild(circlesEffectNode)
+        
         let baseSize: CGFloat = 100
     
         for index in 1...10 {
@@ -32,7 +45,7 @@ class Scene: SKScene {
             circleNode.zPosition = CGFloat(index)
         
             circles.append(circleNode)
-            addChild(circleNode)
+            circlesEffectNode.addChild(circleNode)
         }
     }
     

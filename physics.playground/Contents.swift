@@ -5,10 +5,11 @@ import SpriteKit
 
 let w: CGFloat = 565
 let h: CGFloat = 800
+let ballRadius: CGFloat = 25.0
 
 class Scene: SKScene {
-    private let ballRadius: CGFloat = 25.0
-    
+    private var ball: SKShapeNode = SKShapeNode(circleOfRadius: ballRadius)
+
     private let ballCategory: UInt32 = 0b0001
     private let edgeCategory: UInt32 = 0b0010
 
@@ -19,6 +20,7 @@ class Scene: SKScene {
     override func didMove(to view: SKView) {
         backgroundColor = colorOcean
         
+        prepareBall()
         createEdge()
         createObstacles()
     }
@@ -80,17 +82,21 @@ class Scene: SKScene {
         }
     }
 
-    func createBall(position: CGPoint) {
-        let ball = SKShapeNode(circleOfRadius: ballRadius)
+    func prepareBall() {
         ball.physicsBody = SKPhysicsBody(circleOfRadius: ballRadius)
         ball.fillColor = colorTerracotta
         ball.strokeColor = SKColor.clear
         ball.position = position
-
+        
         ball.physicsBody?.categoryBitMask = ballCategory
         ball.physicsBody?.contactTestBitMask = ballCategory | edgeCategory
         ball.physicsBody?.collisionBitMask = ballCategory | edgeCategory
-        addChild(ball)
+    }
+    
+    func createBall(position: CGPoint) {
+        guard let newBall = ball.copy() as? SKShapeNode else { return }
+        newBall.position = position
+        addChild(newBall)
     }
     
     @objc static override var supportsSecureCoding: Bool {

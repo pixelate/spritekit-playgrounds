@@ -26,6 +26,17 @@ class Scene: SKScene {
     override func mouseDown(with event: NSEvent) {
         createBall(position: event.location(in: self))
     }
+
+    override func keyDown(with event: NSEvent) {
+        super.keyDown(with: event)
+        
+        if(event.keyCode == 15) { // R for restart
+            if let newScene = Scene(fileNamed: "Scene") {
+                let transition = SKTransition.push(with: SKTransitionDirection.left, duration: 0.5)
+                self.scene!.view?.presentScene(newScene, transition: transition)
+            }
+        }
+    }
     
     func createEdge() {
         let edgeNode = SKShapeNode(rect: CGRect(x:-w/2, y: -h/2, width: w, height: h))
@@ -35,7 +46,8 @@ class Scene: SKScene {
         edge.contactTestBitMask = ballCategory
         edge.collisionBitMask = ballCategory
         edgeNode.physicsBody = edge
-        
+        edgeNode.strokeColor = SKColor.clear
+
         addChild(edgeNode)
     }
     
